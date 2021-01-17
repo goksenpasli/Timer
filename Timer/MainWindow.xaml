@@ -1,0 +1,45 @@
+﻿<Window x:Class="Timer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:Timer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Zaman Sayacı"
+    Width="428.434" Height="193.445"
+    d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+    mc:Ignorable="d">
+    <Window.DataContext>
+        <local:MainViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <UniformGrid Columns="5">
+            <TextBlock Text="BAŞLANGIÇ" />
+            <local:MaskedTextBox x:Name="TbBaslangiç"
+                IncludePrompt="False" Mask="00:00" PromptChar="_" ToolTip="SAAT:DAKİKA Şeklinde Giriş Yapın."
+                Value="{Binding SaatBaşlangıç, ValidatesOnDataErrors=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Text="BİTİŞ" />
+            <local:MaskedTextBox x:Name="TbBitis"
+                IncludePrompt="False" Mask="00:00" PromptChar="_" ToolTip="SAAT:DAKİKA Şeklinde Giriş Yapın."
+                Value="{Binding SaatBitiş, ValidatesOnDataErrors=True, NotifyOnValidationError=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="SAAT BAŞLAT" Command="{Binding ZamanlamaBaşlat, Mode=OneWay}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="IsEnabled" Value="false" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding (Validation.HasError), ElementName=TbBaslangiç}" Value="false" />
+                                    <Condition Binding="{Binding (Validation.HasError), ElementName=TbBitis}" Value="false" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="IsEnabled" Value="true" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </UniformGrid>
+        <TextBlock Text="{Binding Sonuç}" Grid.Row="2" FontSize="36" />
+    </Grid>
+</Window>
